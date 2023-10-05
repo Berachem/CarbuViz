@@ -1,0 +1,45 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+* {
+    font-family: 'Rubik', sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+#carburant-dropdown {
+    width: 250px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+#carburant-dropdown .dropdown-menu {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#gas_station_img {
+    width: 200px;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+}
+
+
+#credits_developpeurs
+{
+    text-align: center;
+}
+
+#github_link
+{
+    margin : 0 auto;
+    display: block;
+   margin-top: 10px;
+   font-size: 1.5vh;
+}

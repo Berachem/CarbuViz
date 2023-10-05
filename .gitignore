@@ -1,0 +1,7 @@
+# Extensions de fichiers à ignorer pour maintenir le projet propre
+*.csv
+*.xml
+.dist
+__pycache__
+
+
