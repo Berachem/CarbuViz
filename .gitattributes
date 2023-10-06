@@ -1,0 +1,5 @@
+# Pour les stats de GitHub on ne veut pas compter les fichiers pour le site
+
+*.html linguist-detectable=false
+*.js linguist-detectable=false
+*.css linguist-detectable=false
