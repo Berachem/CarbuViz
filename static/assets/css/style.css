@@ -10,6 +10,16 @@ h1 {
 }
 
 
+#carburant-color-rectangle{
+    display: inline-block;
+    margin-left: 10px;
+    border-radius: 50px;
+    margin-top: -8px;
+    width: 20px;
+    height: 20px;
+}
+
+
 #carburant-dropdown {
     width: 250px;
     margin-bottom: 10px;
@@ -43,3 +53,33 @@ h1 {
    margin-top: 10px;
    font-size: 1.5vh;
 }
+
+*[id="prix-moyen-graph"][data-dash-is-loading="true"]{
+    visibility: hidden;
+}
+*[id="prix-moyen-graph"][data-dash-is-loading="true"]::before {
+    content: "Calcul des données...";
+    display: inline-block;
+    color: rgb(87, 106, 226);
+    visibility: visible;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-right: 3px solid transparent;
+    animation: pulse 1s infinite; 
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5; 
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+

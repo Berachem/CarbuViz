@@ -1,7 +1,5 @@
+from dash import Dash, dcc, html, Input, Output
 import dash
-from dash import dcc
-from dash import html
-from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
 
@@ -39,18 +37,11 @@ app.layout = html.Div([
 
     # Div contenant le dropdown et le rectangle de couleur
     html.Div([
-        
+
         # Rectangle de couleur du carburant
         html.Div(
             id='carburant-color-rectangle',
-            style={
-                'width': '20px',
-                'height': '20px',
-                'background-color': couleursCarburant[carburant_options[0]['value']][0],
-                'display': 'inline-block',
-                'margin-left': '10px',
-                'border-radius': '50px'
-            }
+            style={'background-color': couleursCarburant[carburant_options[0]['value']][0],}
         ),
 
 
@@ -60,18 +51,26 @@ app.layout = html.Div([
             options=carburant_options,
             value=carburant_options[0]['value'],
         )
+    ],
+        style={
+        'display': 'flex',
+        'align-items': 'center',
+        'justify-content': 'center'
+    }
 
-    ]),
+    ),
 
     # Graphique de dispersion
     dcc.Graph(id='prix-moyen-graph'),
-    
-    html.H5(id="credits_developpeurs", 
+
+
+    html.H5(id="credits_developpeurs",
             children="Réalisé par Berachem MARKRIA & Joshua LEMOINE",
             ),
-    
-    #Lien vers le code source
-    html.A( href="https://github.com/Berachem/CarbuCheck", target="_blank", id="github_link", children="Code source"),
+
+    # Lien vers le code source
+    #html.A(href="https://github.com/Berachem/CarbuCheck",
+       #    target="_blank", id="github_link", children="Code source"),
 
 
 ])
@@ -106,17 +105,10 @@ def update_graph(selected_carburant):
                   labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
                   color_discrete_sequence=[
                       couleursCarburant[selected_carburant][0]],
-                    template='plotly_white'
+                  template='plotly_white'
                   )
 
-    return fig, {
-        'width': '20px',
-        'height': '20px',
-        'background-color': couleursCarburant[selected_carburant][0],
-        'display': 'inline-block',
-        'margin-left': '10px',
-        'border-radius': '50px'
-    }
+    return fig, {'background-color': couleursCarburant[selected_carburant][0]}
 
 
 if __name__ == '__main__':
