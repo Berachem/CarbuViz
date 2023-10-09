@@ -3,6 +3,9 @@ from urllib import request
 from zipfile import ZipFile
 import xmltodict
 import pandas as pd
+
+def isRealPrice(price):
+    return price>0.05 and price<9 # on considère que les prix en dessous de 5 centimes et au dessus de 9 euros sont des erreurs
  
 def convert_xml_to_csv(xml_file_path, csv_file_path):
     """
@@ -20,6 +23,10 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     # Convertir le XML en un dictionnaire Python
     data_dict = xmltodict.parse(xml_data, xml_attribs=True)
     
+    # Nombre de points de vente 
+    #total_rows = len(data_dict['pdv_liste']['pdv'])
+    #processed_rows = 0
+    
     # Extraire les données pertinentes du dictionnaire
     data_list = []
     for point_de_vente in data_dict['pdv_liste']['pdv']:
@@ -34,7 +41,7 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
 
             if "prix" in point_de_vente and point_de_vente['prix'] is not None:
                 for prix in point_de_vente['prix']:
-                    if "@nom" not in prix or "@id" not in prix or "@maj" not in prix or "@valeur" not in prix:
+                    if "@nom" not in prix or "@id" not in prix or "@maj" not in prix or "@valeur" not in prix or not isRealPrice(float(prix['@valeur'])):
                         continue
                     nom_carburant = prix['@nom']
                     maj_carburant = prix['@maj']
@@ -50,14 +57,26 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
                         'date': maj_carburant,
                         'valeur_carburant': valeur_carburant
                     })
+        # Mettre à jour le compteur de lignes traitées
+        #processed_rows += 1
+        
+        # Calculer le pourcentage d'exécution
+        #completion_percentage = (processed_rows / total_rows) * 100
+        #print(f"Progression : {completion_percentage:.2f}%")
 
     # Créer un DataFrame pandas à partir de la liste de données
     df = pd.DataFrame(data_list)
+    
+    
+    # Si le chemin vers les dossiers parents du chemin vers le fichier CSV n'existe pas, on le crée
+    if not os.path.exists(os.path.dirname(csv_file_path)):
+        os.makedirs(os.path.dirname(csv_file_path))
+        
 
     # Enregistrer le DataFrame au format CSV
     df.to_csv(csv_file_path, index=False, sep=';')
     os.remove(xml_file_path) # Supprimer le fichier XML pour économiser de l'espace disque
-    print("Conversion terminée ! (fichier CSV enregistré dans le dossier data)")
+    print("Conversion terminée ! (fichier CSV enregistré dans le dossier data/)")
     
     
  

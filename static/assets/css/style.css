@@ -33,8 +33,8 @@ h1 {
     overflow-x: hidden;
 }
 
-#gas_station_img {
-    width: 200px;
+#logo_carbu_viz {
+    width: 300px;
     object-fit: cover;
     margin: 0 auto;
     display: block;
@@ -69,6 +69,51 @@ h1 {
     border-right: 3px solid transparent;
     animation: pulse 1s infinite; 
 }
+
+
+*[id="nombre-stations-graph"][data-dash-is-loading="true"]{
+    visibility: hidden;
+}
+*[id="nombre-stations-graph"][data-dash-is-loading="true"]::before {
+    content: "Calcul des données...";
+    display: inline-block;
+    color: rgb(66, 188, 84);
+    visibility: visible;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-right: 3px solid transparent;
+    animation: pulse 1s infinite; 
+}
+
+
+#prix-median-moyen-container {
+    margin: 0 auto;
+    display: block;
+    text-align: center; /* Centrer horizontalement */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrer verticalement */
+    align-items: center; /* Centrer horizontalement */
+    height: 100%; /* Ajuster la hauteur au contenu */
+    width: 20%;
+    border: 2px solid #000; /* Bordure de 2 pixels de couleur noire */
+    padding: 10px; /* Espacement intérieur de 10 pixels */
+}
+
+#prix-median-text, #prix-moyen-text {
+    font-weight: bold; /* Texte en gras */
+    margin-left: 10px;
+}
+
+
+
+
+
+
+
+/* Animation */
 
 @keyframes pulse {
     0% {
