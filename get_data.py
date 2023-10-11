@@ -108,7 +108,7 @@ def download_instant_info() :
     context.check_hostname = False
     context.verify_mode = ssl.CERT_NONE
     req = request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    with request.urlopen(req,context=context) as response, open('data/PrixCarburants_instane.csv', 'wb') as output_file:
+    with request.urlopen(req,context=context) as response, open('data/PrixCarburants_instantane.csv', 'wb') as output_file:
         output_file.write(response.read())
         
 if __name__ == '__main__':
