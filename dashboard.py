@@ -2,15 +2,15 @@ from dash import Dash, dcc, html, Input, Output
 import dash
 import pandas as pd
 import plotly.express as px
-from constants import COULEURS_CARBURANTS
+from constants import COULEURS_CARBURANTS, ANNEE_CHOISIE
 from map import drawMap
 
 
-annee = 2022
+
 
 
 # Charger les données CSV
-df = pd.read_csv('data/PrixCarburants_annuel_'+str(annee)+'.csv', sep=';')
+df = pd.read_csv('data/PrixCarburants_annuel_'+str(ANNEE_CHOISIE)+'.csv', sep=';')
 
 # Créer une application Dash
 app = dash.Dash(__name__)
@@ -19,17 +19,19 @@ app = dash.Dash(__name__)
 carburant_options = [{'label': carburant, 'value': carburant}
                      for carburant in df['nom_carburant'].unique()]
 
+app.title = "CarbuViz - Projet Python"
+app._favicon = "CarbuViz.ico"
+
+
 # Mise en page de l'application
 app.layout = html.Div([
     html.Link(
         rel='stylesheet',
-        href='/static/assets/css/style.css'
+        href='assets/css/style.css'
     ),
+        # image centrée LOGO
+    html.Img(id="logo_carbu_viz", src="assets/img/carbuVizLogo.png"),
 
-    # image centrée static/assets/gas_station.png
-    html.Img(id="logo_carbu_viz", src="static/assets/img/carbuVizLogo.png"),
-
-    html.H1("Statistiques par type de carburant en "+str(annee)+" ⛽️"),
 
     # Div contenant le dropdown et le rectangle de couleur
     html.Div([
@@ -57,6 +59,30 @@ app.layout = html.Div([
 
     ),
 
+    
+  
+    
+    html.H1("Carte des prix des carburants en temps réel 🌍 🔴"),
+    
+    # Carte
+    html.Div([
+        html.Iframe(id='map', srcDoc=open('generated/map.html', 'r').read(), width='100%', height='600')
+    ]),
+    
+    
+    
+      html.Hr(
+        id='separator',
+        style={
+            'border-top': '2px solid '+COULEURS_CARBURANTS[carburant_options[0]['value']][0],
+        }
+    ),
+    
+    
+    
+
+    html.H1("Statistiques par type de carburant en "+str(ANNEE_CHOISIE)+" ⛽️"),
+
 
 
     dcc.Graph(id='nombre-stations-graph'),
@@ -75,19 +101,7 @@ app.layout = html.Div([
         ])
     ]),
     
-    html.Hr(
-        id='separator',
-        style={
-            'border-top': '2px solid '+COULEURS_CARBURANTS[carburant_options[0]['value']][0],
-        }
-    ),
     
-    html.H1("Carte des prix des carburants en temps réel 🌍 🔴"),
-    
-    # Carte
-    html.Div([
-        html.Iframe(id='map', srcDoc=open('static/map.html', 'r').read(), width='100%', height='600')
-    ]),
 
 
     html.H5(id="credits_developpeurs",
@@ -117,7 +131,7 @@ def generate_text_for_median_moyen(prix_median, prix_moyen, style_median, style_
 # Fonction auxiliaire pour générer le graphique de nombre de stations-service
 def generate_nombre_stations_graph(selected_carburant, nombre_stations):
     return px.bar(nombre_stations, x='mois', y='id',
-                   title=f'Nombre de stations-service vendant du {selected_carburant} par mois en '+str(annee),
+                   title=f'Nombre de stations-service vendant du {selected_carburant} par mois en '+str(ANNEE_CHOISIE),
                    labels={'mois': 'Mois', 'id': 'Nombre de Stations-Service'},
                    color_discrete_sequence=[
                        COULEURS_CARBURANTS[selected_carburant][0]],
@@ -127,7 +141,7 @@ def generate_nombre_stations_graph(selected_carburant, nombre_stations):
 # Fonction auxiliaire pour générer le graphique de tarif moyen
 def generate_prix_moyen_graph(selected_carburant, mois_moyen):
     return px.line(mois_moyen, x='mois', y='valeur_carburant',
-                  title=f'Tarif moyen du {selected_carburant} par mois en '+str(annee),
+                  title=f'Tarif moyen du {selected_carburant} par mois en '+str(ANNEE_CHOISIE),
                   labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
                   color_discrete_sequence=[
                       COULEURS_CARBURANTS[selected_carburant][0]],
@@ -141,7 +155,8 @@ def generate_prix_moyen_graph(selected_carburant, mois_moyen):
      Output('carburant-color-rectangle', 'style'),
      Output('prix-median-text', 'children'),
      Output('prix-moyen-text', 'children'),
-    Output('separator', 'style'),],
+    Output('separator', 'style'),
+    Output('map', 'srcDoc')],
     [Input('carburant-dropdown', 'value')]
 )
 def update_graph(selected_carburant):
@@ -182,7 +197,7 @@ def update_graph(selected_carburant):
     # Générer la carte des prix des carburants
     drawMap(selected_carburant)
 
-    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}
+    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
 
 
 if __name__ == '__main__':

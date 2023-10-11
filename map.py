@@ -26,6 +26,8 @@ def drawMap(gasType) :
     ).add_to(map)
 
 
-    map.save(outfile='static/map.html')
+    map.save(outfile='generated/map.html')
 
-drawMap("E10")
+
+if __name__ == '__main__':
+    drawMap("E10")

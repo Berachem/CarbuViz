@@ -5,6 +5,8 @@ import xmltodict
 import pandas as pd
 import ssl
 
+from constants import ANNEE_CHOISIE
+
 def isRealPrice(price):
     return price>0.05 and price<9 # on considère que les prix en dessous de 5 centimes et au dessus de 9 euros sont des erreurs
  
@@ -24,13 +26,14 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
     # Convertir le XML en un dictionnaire Python
     data_dict = xmltodict.parse(xml_data, xml_attribs=True)
     
-    # Nombre de points de vente 
-    #total_rows = len(data_dict['pdv_liste']['pdv'])
-    #processed_rows = 0
-    
+
     # Extraire les données pertinentes du dictionnaire
     data_list = []
     for point_de_vente in data_dict['pdv_liste']['pdv']:
+        
+        if point_de_vente['adresse'] is None or point_de_vente['ville'] is None:
+            continue
+        
         adresse = point_de_vente['adresse'].replace('`', "'")
         ville = point_de_vente['ville'].replace('`', "'")
         
@@ -58,12 +61,6 @@ def convert_xml_to_csv(xml_file_path, csv_file_path):
                         'date': maj_carburant,
                         'valeur_carburant': valeur_carburant
                     })
-        # Mettre à jour le compteur de lignes traitées
-        #processed_rows += 1
-        
-        # Calculer le pourcentage d'exécution
-        #completion_percentage = (processed_rows / total_rows) * 100
-        #print(f"Progression : {completion_percentage:.2f}%")
 
     # Créer un DataFrame pandas à partir de la liste de données
     df = pd.DataFrame(data_list)
@@ -101,6 +98,8 @@ def download_and_extract_zip_file(url, zip_file_path):
     os.remove(zip_file_path)
     print('Téléchargement de données terminé !')
 
+
+
 def download_csv(url,file) :
     print("[INFO] téléchargement des données instantanées")
     context = ssl.create_default_context()
@@ -112,8 +111,8 @@ def download_csv(url,file) :
         
 if __name__ == '__main__':
     print("[INFO] Le téléchargement des données peut prendre plusieurs minutes si vous avez une connexion lente.")
-    download_and_extract_zip_file(url="https://donnees.roulez-eco.fr/opendata/annee/2022", zip_file_path='donneesCompressees.zip')
-    convert_xml_to_csv(xml_file_path='PrixCarburants_annuel_2022.xml', csv_file_path='data/PrixCarburants_annuel_2022.csv')
+    download_and_extract_zip_file(url="https://donnees.roulez-eco.fr/opendata/annee/"+str(ANNEE_CHOISIE), zip_file_path='donneesCompressees.zip')
+    convert_xml_to_csv(xml_file_path='PrixCarburants_annuel_'+str(ANNEE_CHOISIE)+'.xml', csv_file_path='data/PrixCarburants_annuel_'+str(ANNEE_CHOISIE)+'.csv')
 
     download_csv("https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/csv?lang=fr&timezone=Europe%2FParis&use_labels=true&delimiter=%3B",'data/PrixCarburants_instantane.csv')
     print("[INFO] fin du téléchargement des données")
