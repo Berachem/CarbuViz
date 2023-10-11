@@ -5,12 +5,12 @@ import plotly.express as px
 
 # Créer un dictionnaire de couleurs pour chaque carburant
 couleursCarburant = {
-    "Gazole": ["#FFC300", "#000000"],
-    "SP95": ["#013210", "#FFFFFF"],
-    "E85": ["#35CCEB", "#000000"],
-    "SP98": ["#013210", "#FFFFFF"],
-    "GPLc": ["#033371", "#FFFFFF"],
-    "E10": ["#2CD32C", "#000000"],
+    "Gazole": ["#FFC300", "YlOrBr"],
+    "SP95": ["#013210", "BuGn"],
+    "E85": ["#35CCEB", "PuBu"],
+    "SP98": ["#013210", "BuGn"],
+    "GPLc": ["#033371", "Blues"],
+    "E10": ["#2CD32C", "Greens"],
 }
 
 # Charger les données CSV
