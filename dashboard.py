@@ -76,11 +76,9 @@ app.layout = html.Div([
     ]),
     
     html.Hr(
+        id='separator',
         style={
-            'border': 'none',
-            'border-top': '2px solid #ddd',
-            'margin-top': '2rem',
-            'margin-bottom': '2rem'
+            'border-top': '2px solid '+COULEURS_CARBURANTS[carburant_options[0]['value']][0],
         }
     ),
     
@@ -142,7 +140,8 @@ def generate_prix_moyen_graph(selected_carburant, mois_moyen):
      Output('nombre-stations-graph', 'figure'),
      Output('carburant-color-rectangle', 'style'),
      Output('prix-median-text', 'children'),
-     Output('prix-moyen-text', 'children')],
+     Output('prix-moyen-text', 'children'),
+    Output('separator', 'style'),],
     [Input('carburant-dropdown', 'value')]
 )
 def update_graph(selected_carburant):
@@ -183,7 +182,7 @@ def update_graph(selected_carburant):
     # Générer la carte des prix des carburants
     drawMap(selected_carburant)
 
-    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text
+    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}
 
 
 if __name__ == '__main__':
