@@ -100,7 +100,7 @@ def download_and_extract_zip_file(url, zip_file_path):
     os.remove(zip_file_path)
     print('Téléchargement de données terminé !')
 
-        
+
         
 if __name__ == '__main__':
     print("[INFO] Le téléchargement des données peut prendre plusieurs minutes si vous avez une connexion lente.")
