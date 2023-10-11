@@ -101,22 +101,21 @@ def download_and_extract_zip_file(url, zip_file_path):
     os.remove(zip_file_path)
     print('Téléchargement de données terminé !')
 
-def download_instant_info() :
+def download_csv(url,file) :
     print("[INFO] téléchargement des données instantanées")
-    url = "https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/csv?lang=fr&timezone=Europe%2FParis&use_labels=true&delimiter=%3B"
     context = ssl.create_default_context()
     context.check_hostname = False
     context.verify_mode = ssl.CERT_NONE
     req = request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    with request.urlopen(req,context=context) as response, open('data/PrixCarburants_instantane.csv', 'wb') as output_file:
+    with request.urlopen(req,context=context) as response, open(file, 'wb') as output_file:
         output_file.write(response.read())
         
 if __name__ == '__main__':
-    #print("[INFO] Le téléchargement des données peut prendre plusieurs minutes si vous avez une connexion lente.")
-    #download_and_extract_zip_file(url="https://donnees.roulez-eco.fr/opendata/annee/2022", zip_file_path='donneesCompressees.zip')
-    #convert_xml_to_csv(xml_file_path='PrixCarburants_annuel_2022.xml', csv_file_path='data/PrixCarburants_annuel_2022.csv')
+    print("[INFO] Le téléchargement des données peut prendre plusieurs minutes si vous avez une connexion lente.")
+    download_and_extract_zip_file(url="https://donnees.roulez-eco.fr/opendata/annee/2022", zip_file_path='donneesCompressees.zip')
+    convert_xml_to_csv(xml_file_path='PrixCarburants_annuel_2022.xml', csv_file_path='data/PrixCarburants_annuel_2022.csv')
 
-    download_instant_info()
+    download_csv("https://data.economie.gouv.fr/api/explore/v2.1/catalog/datasets/prix-des-carburants-en-france-flux-instantane-v2/exports/csv?lang=fr&timezone=Europe%2FParis&use_labels=true&delimiter=%3B",'data/PrixCarburants_instantane.csv')
     print("[INFO] fin du téléchargement des données")
 
     #download_and_extract_zip_file(url="https://donnees.roulez-eco.fr/opendata/instantane", zip_file_path='donneesCompressees2.zip')
