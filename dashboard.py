@@ -61,10 +61,12 @@ app.layout = html.Div([
 
     ),
 
-    # Graphique de dispersion
-    dcc.Graph(id='prix-moyen-graph'),
+
 
     dcc.Graph(id='nombre-stations-graph'),
+    
+    
+    dcc.Graph(id='prix-moyen-graph'),
 
 
     # Prix minimum et maximum enregustrés pour le carburant sélectionné
@@ -102,25 +104,25 @@ def generate_text_for_median_moyen(prix_median, prix_moyen, style_median, style_
     moyen_text = [html.Span('Moyenne : ', style=style_moyen), f'{prix_moyen} €']
     return median_text, moyen_text
 
-# Fonction auxiliaire pour générer le graphique de tarif moyen
-def generate_prix_moyen_graph(selected_carburant, mois_moyen):
-    return px.bar(mois_moyen, x='mois', y='valeur_carburant',
-                  title=f'Tarif moyen du {selected_carburant} par mois en 2022',
-                  labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
-                  color_discrete_sequence=[
-                      couleursCarburant[selected_carburant][0]],
-                  template='plotly_white'
-                  )
-
 # Fonction auxiliaire pour générer le graphique de nombre de stations-service
 def generate_nombre_stations_graph(selected_carburant, nombre_stations):
-    return px.line(nombre_stations, x='mois', y='id',
+    return px.bar(nombre_stations, x='mois', y='id',
                    title=f'Nombre de stations-service vendant du {selected_carburant} par mois en 2022',
                    labels={'mois': 'Mois', 'id': 'Nombre de Stations-Service'},
                    color_discrete_sequence=[
                        couleursCarburant[selected_carburant][0]],
                    template='plotly_white',
                    )
+
+# Fonction auxiliaire pour générer le graphique de tarif moyen
+def generate_prix_moyen_graph(selected_carburant, mois_moyen):
+    return px.line(mois_moyen, x='mois', y='valeur_carburant',
+                  title=f'Tarif moyen du {selected_carburant} par mois en 2022',
+                  labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
+                  color_discrete_sequence=[
+                      couleursCarburant[selected_carburant][0]],
+                  template='plotly_white'
+                  )
 
 # Callback pour mettre à jour les graphiques en fonction du type de carburant sélectionné
 @app.callback(
