@@ -2,19 +2,15 @@ from dash import Dash, dcc, html, Input, Output
 import dash
 import pandas as pd
 import plotly.express as px
+from constants import COULEURS_CARBURANTS
+from map import drawMap
 
-# Créer un dictionnaire de couleurs pour chaque carburant
-couleursCarburant = {
-    "Gazole": ["#FFC300", "YlOrBr"],
-    "SP95": ["#013210", "BuGn"],
-    "E85": ["#35CCEB", "PuBu"],
-    "SP98": ["#013210", "BuGn"],
-    "GPLc": ["#033371", "Blues"],
-    "E10": ["#2CD32C", "Greens"],
-}
+
+annee = 2022
+
 
 # Charger les données CSV
-df = pd.read_csv('data/PrixCarburants_annuel_2022.csv', sep=';')
+df = pd.read_csv('data/PrixCarburants_annuel_'+str(annee)+'.csv', sep=';')
 
 # Créer une application Dash
 app = dash.Dash(__name__)
@@ -33,7 +29,7 @@ app.layout = html.Div([
     # image centrée static/assets/gas_station.png
     html.Img(id="logo_carbu_viz", src="static/assets/img/carbuVizLogo.png"),
 
-    html.H1("Statistiques par type de carburant en 2022 ⛽️"),
+    html.H1("Statistiques par type de carburant en "+str(annee)+" ⛽️"),
 
     # Div contenant le dropdown et le rectangle de couleur
     html.Div([
@@ -42,7 +38,7 @@ app.layout = html.Div([
         html.Div(
             id='carburant-color-rectangle',
             style={
-                'background-color': couleursCarburant[carburant_options[0]['value']][0], }
+                'background-color': COULEURS_CARBURANTS[carburant_options[0]['value']][0], }
         ),
 
 
@@ -78,6 +74,22 @@ app.layout = html.Div([
             ])
         ])
     ]),
+    
+    html.Hr(
+        style={
+            'border': 'none',
+            'border-top': '2px solid #ddd',
+            'margin-top': '2rem',
+            'margin-bottom': '2rem'
+        }
+    ),
+    
+    html.H1("Carte des prix des carburants en temps réel 🌍 🔴"),
+    
+    # Carte
+    html.Div([
+        html.Iframe(id='map', srcDoc=open('static/map.html', 'r').read(), width='100%', height='600')
+    ]),
 
 
     html.H5(id="credits_developpeurs",
@@ -107,20 +119,20 @@ def generate_text_for_median_moyen(prix_median, prix_moyen, style_median, style_
 # Fonction auxiliaire pour générer le graphique de nombre de stations-service
 def generate_nombre_stations_graph(selected_carburant, nombre_stations):
     return px.bar(nombre_stations, x='mois', y='id',
-                   title=f'Nombre de stations-service vendant du {selected_carburant} par mois en 2022',
+                   title=f'Nombre de stations-service vendant du {selected_carburant} par mois en '+str(annee),
                    labels={'mois': 'Mois', 'id': 'Nombre de Stations-Service'},
                    color_discrete_sequence=[
-                       couleursCarburant[selected_carburant][0]],
+                       COULEURS_CARBURANTS[selected_carburant][0]],
                    template='plotly_white',
                    )
 
 # Fonction auxiliaire pour générer le graphique de tarif moyen
 def generate_prix_moyen_graph(selected_carburant, mois_moyen):
     return px.line(mois_moyen, x='mois', y='valeur_carburant',
-                  title=f'Tarif moyen du {selected_carburant} par mois en 2022',
+                  title=f'Tarif moyen du {selected_carburant} par mois en '+str(annee),
                   labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
                   color_discrete_sequence=[
-                      couleursCarburant[selected_carburant][0]],
+                      COULEURS_CARBURANTS[selected_carburant][0]],
                   template='plotly_white'
                   )
 
@@ -167,8 +179,11 @@ def update_graph(selected_carburant):
 
     # Générer le texte des prix médian et moyen
     median_text, moyen_text = generate_text_for_median_moyen(prix_median, prix_moyen, style_median, style_moyen)
+    
+    # Générer la carte des prix des carburants
+    drawMap(selected_carburant)
 
-    return fig_prix_moyen, fig_nombre_stations, {'background-color': couleursCarburant[selected_carburant][0]}, median_text, moyen_text
+    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text
 
 
 if __name__ == '__main__':

@@ -1,15 +1,6 @@
 import folium
 import pandas as pd
-
-#colors
-color = {
-    "Gazole" : "YlOrBr",
-    "SP95" : "BuGn",
-    "E85" : "PuBu",
-    "SP98" : "BuGn",
-    "GPLc" : "Blues",
-    "E10" : "Greens"
-}
+from constants import COULEURS_CARBURANTS
 
 #données
 def drawMap(gasType) :
@@ -28,13 +19,13 @@ def drawMap(gasType) :
         data=gas_data,                                           # numerical data
         columns=['code_departement',gasType+'_prix'],              # numerical data key/value pair
         key_on='feature.properties.code',                        # geographical property used to establish correspondance with numerical data
-        fill_color=color[gasType],
+        fill_color=COULEURS_CARBURANTS[gasType][1],
         fill_opacity=0.7,
         line_opacity=0.2,
         legend_name='Prix essence'
     ).add_to(map)
 
 
-    map.save(outfile='map.html')
+    map.save(outfile='static/map.html')
 
 drawMap("E10")
