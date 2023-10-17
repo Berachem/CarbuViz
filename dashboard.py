@@ -90,6 +90,8 @@ app.layout = html.Div([
     
     dcc.Graph(id='prix-moyen-graph'),
 
+    dcc.Graph(id='prix-semaine-graph'),
+
 
     # Prix minimum et maximum enregustrés pour le carburant sélectionné
     html.Div([
@@ -148,10 +150,29 @@ def generate_prix_moyen_graph(selected_carburant, mois_moyen):
                   template='plotly_white'
                   )
 
+def generate_prix_semaine_graph(selected_carburant,semaine_moyen):
+    fig = px.histogram(
+        semaine_moyen,x='semaine',y='valeur_carburant',
+        title=f'Tarif moyen du {selected_carburant} par semaine en '+str(ANNEE_CHOISIE),
+        labels={'semaine': 'Semaine', 'valeur_carburant': 'Tarif Moyen'},
+        color_discrete_sequence=[
+            COULEURS_CARBURANTS[selected_carburant][0]],
+        template='plotly_white'
+    )
+
+    #suppression hover
+    fig.update_traces(hovertext="none")
+
+    #séparation des bandes
+    fig.update_layout(bargap=0.2)
+
+    return fig
+
 # Callback pour mettre à jour les graphiques en fonction du type de carburant sélectionné
 @app.callback(
     [Output('prix-moyen-graph', 'figure'),
      Output('nombre-stations-graph', 'figure'),
+     Output('prix-semaine-graph','figure'),
      Output('carburant-color-rectangle', 'style'),
      Output('prix-median-text', 'children'),
      Output('prix-moyen-text', 'children'),
@@ -171,6 +192,12 @@ def update_graph(selected_carburant):
     # Extraire le mois et l'année de la date
     filtered_df['mois'] = filtered_df['date'].dt.strftime('%m/%Y')
 
+    #Extraire la semaine de l'année via la date
+    filtered_df['semaine'] = filtered_df['date'].dt.isocalendar().week
+
+    #Extraire le tarif moyen pour chaque semaine 
+    semaine_moyen = filtered_df.groupby('semaine')['valeur_carburant'].mean().reset_index()
+
     # Calculer le tarif moyen pour chaque mois
     mois_moyen = filtered_df.groupby(
         'mois')['valeur_carburant'].mean().reset_index()
@@ -181,8 +208,9 @@ def update_graph(selected_carburant):
 
     # Générer les graphiques de tarif moyen et de nombre de stations-service
     fig_prix_moyen = generate_prix_moyen_graph(selected_carburant, mois_moyen)
-    fig_nombre_stations = generate_nombre_stations_graph(
-        selected_carburant, nombre_stations)
+    fig_nombre_stations = generate_nombre_stations_graph(selected_carburant, nombre_stations)
+    fig_semaine_moyen = generate_prix_semaine_graph(selected_carburant,semaine_moyen)
+
 
     # Calculer le prix médian et moyen
     prix_median = filtered_df['valeur_carburant'].median().round(3)
@@ -197,7 +225,7 @@ def update_graph(selected_carburant):
     # Générer la carte des prix des carburants
     drawMap(selected_carburant)
 
-    return fig_prix_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
+    return fig_prix_moyen, fig_semaine_moyen, fig_nombre_stations, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
 
 
 if __name__ == '__main__':
