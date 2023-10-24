@@ -161,7 +161,8 @@ def generate_prix_semaine_graph(selected_carburant,semaine_moyen):
         color_discrete_sequence=[
             COULEURS_CARBURANTS[selected_carburant][0]],
         template='plotly_white',
-        nbins = 13
+        nbins = 26,
+        histfunc='avg'
     )
 
     #suppression hover
@@ -177,8 +178,7 @@ def generate_evolution_penurie_annee(selected_carburant,station_penurie):
     return px.line(station_penurie, x='semaine', y='id',
                   title=f'Nombre de station sans {selected_carburant} sur '+str(ANNEE_CHOISIE),
                   labels={'date': 'date', 'id': 'Nombre de Stations-Service'},
-                  color_discrete_sequence=[
-                      COULEURS_CARBURANTS[selected_carburant][0]],
+                  color_discrete_sequence=["#FF0020"],
                   template='plotly_white'
                   )
 
