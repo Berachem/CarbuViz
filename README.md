@@ -1,5 +1,12 @@
 # CarbuCheck ⛽️
 
+
+
+https://github.com/Berachem/CarbuCheck/assets/61350744/a7aa239c-5e8a-431d-abe8-d8485ca9d8a4
+
+Made by Berachem MARKRIA & Joshua LEMOINE 🤩
+
+
 ## Description du Projet 🚀
 
 Le mini-projet CarbuCheck a pour objectif d'éclairer un sujet d'intérêt public, en l'occurrence, les données sur les carburants en France (annuelles et instantanées). L'utilisation de données publiques Open Data, accessibles et non modifiées, est au cœur de notre approche.
