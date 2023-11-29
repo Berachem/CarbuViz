@@ -70,8 +70,9 @@ hr {
 *[id="prix-moyen-graph"][data-dash-is-loading="true"]::before {
     content: "Calcul des données...";
     display: inline-block;
-    color: rgb(87, 106, 226);
-    font-size: 1.5vh;
+    color: #08CEDB;
+    font-weight: bold;
+    font-size: 2rem;
     visibility: visible;
     position: fixed;
     top: 0;
@@ -83,6 +84,7 @@ hr {
     align-items: center;
     justify-content: center;
     z-index: 9999; 
+    animation: pulse 2s infinite ease-in-out;
 }
 
 
@@ -130,13 +132,13 @@ hr {
 
 @keyframes pulse {
     0% {
-        opacity: 1;
+        color: rgba(8,206,219,0);
     }
     50% {
-        opacity: 0.5; 
+        color: rgba(8,206,219,1);
     }
     100% {
-        opacity: 1;
+        color: rgba(8,206,219,0);
     }
 }
 
