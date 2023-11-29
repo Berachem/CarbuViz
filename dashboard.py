@@ -49,6 +49,7 @@ app.layout = html.Div([
             id='carburant-dropdown',
             options=carburant_options,
             value=carburant_options[0]['value'],
+            clearable = False,
         )
     ],
         style={
@@ -272,4 +273,4 @@ def update_graph(selected_carburant):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
