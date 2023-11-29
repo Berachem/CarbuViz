@@ -22,7 +22,7 @@ def drawMap(gasType) :
         fill_color=COULEURS_CARBURANTS[gasType][1],
         fill_opacity=0.7,
         line_opacity=0.2,
-        legend_name='Prix essence'
+        legend_name='Prix essence /L'
     ).add_to(map)
 
 

@@ -85,7 +85,7 @@ app.layout = html.Div([
 
     dcc.Graph(id='regroupement-prix-graph'),
 
-    dcc.Graph(id='nombre-stations-graph'),
+    #dcc.Graph(id='nombre-stations-graph'),
 
     dcc.Graph(id='prix-moyen-graph'),
 
@@ -203,7 +203,7 @@ def generate_repartition_prix_nombre_station(selected_carburant,prix_moyen_annee
     [
      Output('regroupement-prix-graph', 'figure'),
      Output('prix-moyen-graph', 'figure'),
-     Output('nombre-stations-graph', 'figure'),
+     #Output('nombre-stations-graph', 'figure'),
      Output('prix-semaine-graph','figure'),
      Output('penurie_graph', 'figure'),
      Output('carburant-color-rectangle', 'style'),
@@ -267,7 +267,8 @@ def update_graph(selected_carburant):
     # Générer la carte des prix des carburants
     drawMap(selected_carburant)
 
-    return fig_regroupement_prix,fig_prix_moyen, fig_semaine_moyen, fig_nombre_stations, fig_penurie, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
+    #eventuellement fig_nombre_stations
+    return fig_regroupement_prix,fig_prix_moyen, fig_semaine_moyen, fig_penurie, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
 
 
 if __name__ == '__main__':
