@@ -83,6 +83,8 @@ app.layout = html.Div([
 
     html.H1("Statistiques par type de carburant en "+str(ANNEE_CHOISIE)+" ⛽️"),
 
+    dcc.Graph(id='regroupement-prix-graph'),
+
     dcc.Graph(id='nombre-stations-graph'),
 
     dcc.Graph(id='prix-moyen-graph'),
@@ -178,9 +180,29 @@ def generate_evolution_penurie_annee(selected_carburant,station_penurie):
                   template='plotly_white'
                   )
 
+# Fonction auxiliaire pour générer l'histogramme des stations regroupées par prix
+def generate_repartition_prix_nombre_station(selected_carburant,prix_moyen_annee):
+    fig = px.histogram(
+        prix_moyen_annee,x='valeur_carburant',y='id',
+        title=f'Repartition des prix pour le {selected_carburant} sur '+str(ANNEE_CHOISIE),
+        labels={'valeur_carburant': 'prix', 'id': 'Nombre de stations'},
+        color_discrete_sequence=[
+            COULEURS_CARBURANTS[selected_carburant][0]],
+        template='plotly_white',
+        nbins = 24,
+        histfunc = "count",
+    )
+
+    fig.update_xaxes(tickformat=".2f")
+    fig.update_layout(bargap=0.1)
+
+    return fig
+
 # Callback pour mettre à jour les graphiques en fonction du type de carburant sélectionné
 @app.callback(
-    [Output('prix-moyen-graph', 'figure'),
+    [
+     Output('regroupement-prix-graph', 'figure'),
+     Output('prix-moyen-graph', 'figure'),
      Output('nombre-stations-graph', 'figure'),
      Output('prix-semaine-graph','figure'),
      Output('penurie_graph', 'figure'),
@@ -198,8 +220,7 @@ def update_graph(selected_carburant):
     filtered_df = df[mask]
 
     # Convertir la colonne 'date' en datetime avec le format spécifié
-    filtered_df['date'] = pd.to_datetime(
-        filtered_df['date'], format='mixed', dayfirst=True)
+    filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='mixed', dayfirst=True)
 
     # Extraire le mois et l'année de la date
     filtered_df['mois'] = filtered_df['date'].dt.strftime('%m/%Y')
@@ -207,16 +228,17 @@ def update_graph(selected_carburant):
     #Extraire la semaine de l'année via la date
     filtered_df['semaine'] = filtered_df['date'].dt.isocalendar().week
 
+    #Regrouper les stations par prix
+    station_par_prix = filtered_df.groupby("id")['valeur_carburant'].mean().reset_index()
+
     #Extraire le tarif moyen pour chaque semaine 
     semaine_moyen = filtered_df.groupby('semaine')['valeur_carburant'].mean().reset_index()
 
     #Calculer le tarif moyen pour chaque mois
-    mois_moyen = filtered_df.groupby(
-        'mois')['valeur_carburant'].mean().reset_index()
+    mois_moyen = filtered_df.groupby('mois')['valeur_carburant'].mean().reset_index()
 
     #Calculer le nombre de stations-service pour chaque mois
-    nombre_stations = filtered_df.groupby(
-        'mois')['id'].nunique().reset_index()
+    nombre_stations = filtered_df.groupby('mois')['id'].nunique().reset_index()
 
     #Calculer le nombre de stations services ne proposant pas le carburant selectionné par jour
     oposite_mask = ~df['id'].isin(filtered_df['id'])
@@ -225,7 +247,8 @@ def update_graph(selected_carburant):
     oposite_filtered_df['semaine'] = oposite_filtered_df['date'].dt.isocalendar().week
     station_penurie = oposite_filtered_df.groupby('semaine').nunique().reset_index()
 
-    # Générer les graphiques de tarif moyen, de nombre de stations-service et du prix par semaine
+    #Générer les graphiques de tarif moyen, de nombre de stations-service et du prix par semaine
+    fig_regroupement_prix = generate_repartition_prix_nombre_station(selected_carburant,station_par_prix)
     fig_prix_moyen = generate_prix_moyen_graph(selected_carburant, mois_moyen)
     fig_nombre_stations = generate_nombre_stations_graph(selected_carburant, nombre_stations)
     fig_semaine_moyen = generate_prix_semaine_graph(selected_carburant,semaine_moyen)
@@ -244,7 +267,7 @@ def update_graph(selected_carburant):
     # Générer la carte des prix des carburants
     drawMap(selected_carburant)
 
-    return fig_prix_moyen, fig_semaine_moyen, fig_nombre_stations, fig_penurie, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
+    return fig_regroupement_prix,fig_prix_moyen, fig_semaine_moyen, fig_nombre_stations, fig_penurie, {'background-color': COULEURS_CARBURANTS[selected_carburant][0]}, median_text, moyen_text, {'border-top': '2px solid '+COULEURS_CARBURANTS[selected_carburant][0]}, open('generated/map.html', 'r').read()
 
 
 if __name__ == '__main__':
