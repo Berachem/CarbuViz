@@ -217,7 +217,7 @@ def generate_repartition_prix_nombre_station(selected_carburant,prix_moyen_annee
 def update_graph(selected_carburant):
     # Filtrer les données pour le carburant sélectionné
     mask = (df['nom_carburant'] == selected_carburant)
-    filtered_df = df[mask]
+    filtered_df = df.loc[mask].copy()
 
     # Convertir la colonne 'date' en datetime avec le format spécifié
     filtered_df['date'] = pd.to_datetime(filtered_df['date'], format='mixed', dayfirst=True)
@@ -242,7 +242,7 @@ def update_graph(selected_carburant):
 
     #Calculer le nombre de stations services ne proposant pas le carburant selectionné par jour
     oposite_mask = ~df['id'].isin(filtered_df['id'])
-    oposite_filtered_df = df[oposite_mask]
+    oposite_filtered_df = df.loc[oposite_mask].copy()
     oposite_filtered_df['date'] = pd.to_datetime(oposite_filtered_df['date'], format='mixed', dayfirst=True)
     oposite_filtered_df['semaine'] = oposite_filtered_df['date'].dt.isocalendar().week
     station_penurie = oposite_filtered_df.groupby('semaine').nunique().reset_index()
