@@ -3,5 +3,6 @@
 *.xml
 .dist
 __pycache__
+generated/
 
 

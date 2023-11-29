@@ -83,11 +83,8 @@ app.layout = html.Div([
 
     html.H1("Statistiques par type de carburant en "+str(ANNEE_CHOISIE)+" ⛽️"),
 
-
-
     dcc.Graph(id='nombre-stations-graph'),
-    
-    
+
     dcc.Graph(id='prix-moyen-graph'),
 
     dcc.Graph(id='prix-semaine-graph'),
@@ -95,13 +92,12 @@ app.layout = html.Div([
     dcc.Graph(id='penurie_graph'),
 
 
-    # Prix minimum et maximum enregustrés pour le carburant sélectionné
+    # Prix moyen et median enregustrés pour le carburant sélectionné
     html.Div([
         html.Div(id='prix-median-moyen-container', children=[
-            html.H5(id='prix-median-moyen-text', children=[
-                html.Span(id='prix-median-text'),
-                html.Span(id='prix-moyen-text')
-            ])
+            html.Span(children="Chiffres annuels : "),
+            html.Span(id='prix-median-text'),
+            html.Span(id='prix-moyen-text')
         ])
     ]),
     
@@ -235,7 +231,7 @@ def update_graph(selected_carburant):
     fig_semaine_moyen = generate_prix_semaine_graph(selected_carburant,semaine_moyen)
     fig_penurie = generate_evolution_penurie_annee(selected_carburant,station_penurie)
 
-    # Calculer le prix médian et moyen
+    # Calculer le prix médian et moyen sur l'annee
     prix_median = filtered_df['valeur_carburant'].median().round(3)
     prix_moyen = filtered_df['valeur_carburant'].mean().round(3)
 

@@ -17,7 +17,7 @@ def drawMap(gasType) :
         geo_data="data/departements.geojson",                    # geographical data
         name='choropleth',
         data=gas_data,                                           # numerical data
-        columns=['code_departement',gasType+'_prix'],              # numerical data key/value pair
+        columns=['code_departement',gasType+'_prix'],            # numerical data key/value pair
         key_on='feature.properties.code',                        # geographical property used to establish correspondance with numerical data
         fill_color=COULEURS_CARBURANTS[gasType][1],
         fill_opacity=0.7,
