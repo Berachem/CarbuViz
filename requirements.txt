@@ -6,4 +6,3 @@ plotly
 pandas
 xmltodict
 folium
-ssl
