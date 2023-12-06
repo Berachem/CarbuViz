@@ -60,9 +60,7 @@ app.layout = html.Div([
 
     ),
 
-    
-  
-    
+    # Titre de l'application
     html.H1("Carte des prix des carburants en temps réel 🌍 🔴"),
     
     # Carte
@@ -70,8 +68,7 @@ app.layout = html.Div([
         html.Iframe(id='map', srcDoc=open('generated/map.html', 'r').read(), width='100%', height='600')
     ]),
     
-    
-    
+    # Séparateur
       html.Hr(
         id='separator',
         style={
@@ -80,19 +77,16 @@ app.layout = html.Div([
     ),
     
     
-    
-
+    # Titre de la partie graphique
     html.H1("Statistiques par type de carburant en "+str(ANNEE_CHOISIE)+" ⛽️"),
 
-    dcc.Graph(id='regroupement-prix-graph'),
+    dcc.Graph(id='regroupement-prix-graph'), # Histogramme des prix pour le nombre de stations-service
 
-    #dcc.Graph(id='nombre-stations-graph'),
+    dcc.Graph(id='prix-moyen-graph'), # Graphique de tarif moyen par mois
 
-    dcc.Graph(id='prix-moyen-graph'),
+    dcc.Graph(id='prix-semaine-graph'), # Graphique de tarif moyen par semaine
 
-    dcc.Graph(id='prix-semaine-graph'),
-
-    dcc.Graph(id='penurie_graph'),
+    dcc.Graph(id='penurie_graph'), # Graphique des pénuries par semaine
 
 
     # Prix moyen et median enregustrés pour le carburant sélectionné
@@ -104,35 +98,58 @@ app.layout = html.Div([
         ])
     ]),
     
-    
-
-
+    # Crédits
     html.H5(id="credits_developpeurs",
             children="Réalisé par Berachem MARKRIA & Joshua LEMOINE",
             ),
-
-    # Lien vers le code source
-    # html.A(href="https://github.com/Berachem/CarbuCheck",
-    #    target="_blank", id="github_link", children="Code source"),
-
-
 ])
 
 
-# Fonction pour générer le style des mots "médian" et "moyen"
 def generate_style_for_median_moyen(median_color, moyen_color):
+    """
+    Fonction pour générer le style des mots "médian" et "moyen"
+
+    Args:
+        median_color (str): Couleur du mot "médian"
+        moyen_color (str): Couleur du mot "moyen"
+        
+    Returns:
+        style_median (dict): Style du mot "médian"
+        style_moyen (dict): Style du mot "moyen"
+    """
     style_median = {'color': median_color, 'font-weight': 'bold'}
     style_moyen = {'color': moyen_color, 'font-weight': 'bold'}
     return style_median, style_moyen
 
-# Fonction pour générer le texte des prix médian et moyen
 def generate_text_for_median_moyen(prix_median, prix_moyen, style_median, style_moyen):
+    """
+    Fonction pour générer le texte des prix médian et moyen
+    
+    Args:
+        prix_median (float): Prix médian
+        prix_moyen (float): Prix moyen
+        style_median (dict): Style du mot "médian"
+        style_moyen (dict): Style du mot "moyen"
+        
+    Returns:
+        median_text (list): Texte du prix médian
+        moyen_text (list): Texte du prix moyen
+    """
     median_text = [html.Span('Médiane : ', style=style_median), f'{prix_median} €']
     moyen_text = [html.Span('Moyenne : ', style=style_moyen), f'{prix_moyen} €']
     return median_text, moyen_text
 
-# Fonction auxiliaire pour générer le graphique de nombre de stations-service
 def generate_nombre_stations_graph(selected_carburant, nombre_stations):
+    """
+    Fonction auxiliaire pour générer le graphique de nombre de stations-service
+    
+    Args:
+        selected_carburant (str): Carburant sélectionné
+        nombre_stations (DataFrame): Nombre de stations-service pour chaque mois
+        
+    Returns:
+        fig (plotly.graph_objects.Figure): Graphique de nombre de stations-service
+    """
     return px.bar(nombre_stations, x='mois', y='id',
                    title=f'Nombre de stations-service vendant du {selected_carburant} par mois en '+str(ANNEE_CHOISIE),
                    labels={'mois': 'Mois', 'id': 'Nombre de Stations-Service'},
@@ -141,8 +158,17 @@ def generate_nombre_stations_graph(selected_carburant, nombre_stations):
                    template='plotly_white',
                    )
 
-# Fonction auxiliaire pour générer le graphique de tarif moyen
 def generate_prix_moyen_graph(selected_carburant, mois_moyen):
+    """
+    Fonction auxiliaire pour générer le graphique des tarifs moyens par mois
+    
+    Args :
+        selected_carburant (str): Carburant sélectionné
+        mois_moyen (DataFrame): Tarif moyen pour chaque mois
+        
+    Returns:
+        fig (plotly.graph_objects.Figure): Graphique de tarif moyen par mois
+    """
     return px.line(mois_moyen, x='mois', y='valeur_carburant',
                   title=f'Tarif moyen du {selected_carburant} par mois en '+str(ANNEE_CHOISIE),
                   labels={'mois': 'Mois', 'valeur_carburant': 'Tarif Moyen'},
@@ -151,8 +177,17 @@ def generate_prix_moyen_graph(selected_carburant, mois_moyen):
                   template='plotly_white'
                   )
 
-# Fonction auxiliaire pour générer le graphique des prix par semaine
 def generate_prix_semaine_graph(selected_carburant,semaine_moyen):
+    """
+    Fonction auxiliaire pour générer le graphique des tarifs moyens par semaine
+    
+    Args :
+        selected_carburant (str): Carburant sélectionné
+        semaine_moyen (DataFrame): Tarif moyen pour chaque semaine
+        
+    Returns:
+        fig (plotly.graph_objects.Figure): Graphique de tarif moyen par semaine
+    """
     fig = px.histogram(
         semaine_moyen,x='semaine',y='valeur_carburant',
         title=f'Tarif moyen du {selected_carburant} par semaine en '+str(ANNEE_CHOISIE),
@@ -172,8 +207,17 @@ def generate_prix_semaine_graph(selected_carburant,semaine_moyen):
 
     return fig
 
-# Fonction auxiliaire pour générer le graphique des penuries
 def generate_evolution_penurie_annee(selected_carburant,station_penurie):
+    """
+    Fonction auxiliaire pour générer le graphique des penuries
+    
+    Args :
+        selected_carburant (str): Carburant sélectionné
+        station_penurie (DataFrame): Nombre de stations sans le carburant sélectionné
+        
+    Returns:
+        fig (plotly.graph_objects.Figure): Graphique des penuries
+    """
     return px.line(station_penurie, x='semaine', y='id',
                   title=f'Nombre de station sans {selected_carburant} sur '+str(ANNEE_CHOISIE),
                   labels={'date': 'date', 'id': 'Nombre de Stations-Service'},
@@ -181,8 +225,17 @@ def generate_evolution_penurie_annee(selected_carburant,station_penurie):
                   template='plotly_white'
                   )
 
-# Fonction auxiliaire pour générer l'histogramme des stations regroupées par prix
 def generate_repartition_prix_nombre_station(selected_carburant,prix_moyen_annee):
+    """
+    Fonction auxiliaire pour générer l'histogramme des stations regroupées par prix
+    
+    Args : 
+        selected_carburant (str): Carburant sélectionné
+        prix_moyen_annee (DataFrame) : Intervalles contenant les moyennes de prix sur l'année de chaque station
+        
+    Return :
+        fig (plotly.graph_objects.Figure): Graphique des répartition des prix moyens annuels
+    """
     fig = px.histogram(
         prix_moyen_annee,x='valeur_carburant',y='id',
         title=f'Repartition des prix pour le {selected_carburant} sur '+str(ANNEE_CHOISIE),
@@ -216,6 +269,17 @@ def generate_repartition_prix_nombre_station(selected_carburant,prix_moyen_annee
     [Input('carburant-dropdown', 'value')]
 )
 def update_graph(selected_carburant):
+    """
+    Fonction pour mettre à jour les graphiques en fonction du type de carburant sélectionné. 
+    Cette fonction va par ailleurs générer la carte des prix des carburants instantannées.
+    
+    Args:
+    
+        selected_carburant (str): Carburant sélectionné
+        
+    Returns:
+        Tous les éléments de la mise en page à mettre à jour (voir la liste des retours "Outputs")
+    """
     # Filtrer les données pour le carburant sélectionné
     mask = (df['nom_carburant'] == selected_carburant)
     filtered_df = df.loc[mask].copy()

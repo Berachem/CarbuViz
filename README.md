@@ -85,15 +85,24 @@ Si vous souhaitez enrichir le projet, voici quelques endroits où vous pouvez co
 
 ### 1. Carte
 
-La carte représente le prix moyen du carburant par département. Elle est générée à partir des données instantanées.
+- La carte représente le prix moyen du carburant par département. Elle est générée à partir des données instantanées. 
+> On observe que Paris et la Corse possèdent les prix moyens du carburant les plus élevés. 
 
 ### 2. Graphiques
 
-- L'histogramme représente le nombre de stations-services qui proposent un prix moyen du carburant par intervalle de prix. Il est généré à partir des données instantanées.
-On peut observer que la majorité des stations-services proposent un prix moyen du carburant entre 1,5€ et 2€. Et qu'il existe tout de même des stations-services qui proposent un prix moyen du carburant supérieur à 2,5€ parfois et __très__ rarement inférieur à 1€.
+- L'histogramme représente le nombre de stations-services qui proposent un prix moyen du carburant par intervalle de prix. Il est généré à partir des données annuelles.
+>On peut observer que la majorité des stations-services proposent un prix moyen du carburant entre 1,5€ et 2€. Et qu'il existe tout de même des stations-services qui proposent un prix moyen du carburant supérieur à 2,5€ parfois et __très__ rarement inférieur à 1€.
 
 - Le graphique représente le prix moyen du carburant par mois. Il est généré à partir des données annuelles.
-On peut observer que le prix moyen du carburant a subit des piques en Mars et Juin 2022. Ces piques se font même ressentir au niveau des médias : [exemple d'article](https://www.turbo.fr/actualite-automobile/carburants-les-prix-senvolent-le-diesel-depasse-largement-les-2-euros-184722).
+> On peut observer que le prix moyen du carburant a subit des piques en Mars et Juin 2022. Ces piques se font même ressentir au niveau des médias : [exemple d'article](https://www.turbo.fr/actualite-automobile/carburants-les-prix-senvolent-le-diesel-depasse-largement-les-2-euros-184722).
+
+- Le graphique représente le prix moyen du carburant par semaine. Il est généré à partir des données annuelles.
+> On retrouve les mêmes piques que sur le graphique précédent mais avec une plus grande précision et donc une fluctuation plus faible.
+
+- Le graphique représente le nombre de stations-services sans le carburant sélectionné par semaine. Il est généré à partir des données annuelles.
+> On peut observer qu'il y a une correlation entre le prix moyen du carburant et le nombre de stations-services qui ne le proposent pas. En effet, lorsque le nombre de stations-services qui ne proposent pas le carburant sélectionné augmente, le prix moyen du carburant augmente également.
+
+
 
 
 
