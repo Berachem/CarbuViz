@@ -32,13 +32,19 @@ Le choix du sujet est libre, mais le résultat doit être un code Python structu
 
 Vous devez produire du code Python qui recueille et nettoie les données sur les carburants en France, les organise et les représente graphiquement de manière interactive. Le projet doit illustrer votre point de vue sur le sujet.
 
-## Commandes à Exécuter pour Lancer le Projet 🚀
+## Commandes à Exécuter pour Lancer le Projet 🚀 : le "User Guide"
 
 1. Installez les dépendances avec la commande : 
-`pip3 install -r requirements.txt`
+`pip install -r requirements.txt`
 2. Récupérez les données de l'année 2022 et celles en direct avec : 
-`python3 get_data.py`
+`python get_data.py`
 3. Lancez le dashboard avec : 
-`python3 dashboard.py`
+`python main.py`
 
 Ces commandes garantissent une installation facile et rapide du projet CarbuCheck. Explorez et visualisez les données sur les carburants en France de manière interactive dans votre navigateur préféré. Bonne exploration ! 🌐
+
+## Developer Guide
+Un guide pour comprendre l'architecture du code et modifier ou étendre celui-ci.
+
+## Rapport d'Analyse
+Un rapport mettant en avant les principales conclusions extraites des données.
