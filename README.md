@@ -28,9 +28,9 @@ L'open data (ou donnée ouverte) est une donnée numérique d'origine publique o
 
 Le choix du sujet est libre, mais le résultat doit être un code Python structuré en plusieurs fichiers, permettant d'exécuter un dashboard dans un navigateur standard. Le dashboard doit contenir a minima un histogramme et une représentation géolocalisée, avec au moins l'un des graphiques étant dynamique.
 
-## Livrables 📦
+__Consigne :__
 
-Vous devez produire du code Python qui recueille et nettoie les données sur les carburants en France, les organise et les représente graphiquement de manière interactive. Le projet doit illustrer votre point de vue sur le sujet.
+> "Vous devez produire du code Python qui recueille et nettoie les données sur les carburants en France, les organise et les représente graphiquement de manière interactive. Le projet doit illustrer votre point de vue sur le sujet."
 
 ## Commandes à Exécuter pour Lancer le Projet 🚀 : le "User Guide"
 
@@ -43,8 +43,58 @@ Vous devez produire du code Python qui recueille et nettoie les données sur les
 
 Ces commandes garantissent une installation facile et rapide du projet CarbuCheck. Explorez et visualisez les données sur les carburants en France de manière interactive dans votre navigateur préféré. Bonne exploration ! 🌐
 
-## Developer Guide
-Un guide pour comprendre l'architecture du code et modifier ou étendre celui-ci.
+## 🧑‍💻 Developer Guide
 
-## Rapport d'Analyse
-Un rapport mettant en avant les principales conclusions extraites des données.
+#### Architecture du Projet
+
+```
+.
+├── assets
+│   ├── css
+│   │   └── style.css
+│   ├── img
+│   │   ├── carbuVizLogo.png
+│   │   └── gas_station.png
+│   └── CarbuViz.ico
+├── data
+│   └── ... (données brutes)
+├── generated
+│   └── ... (cartes générées)
+├── constants.py
+├── get_data.py
+├── dashboard.py
+├── map.py
+├── main.py
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+Si vous souhaitez enrichir le projet, voici quelques endroits où vous pouvez commencer :
+
+- `constants.py` : contient les constantes utilisées dans le projet (les types de carburants associés à leur couleur et l'année des données à récupérer)
+
+- `get_data.py` : contient les fonctions permettant de récupérer les données sur les carburants en France (annuelles et instantanées) et de les nettoyer
+
+- `map.py` : contient les fonctions permettant de générer les cartes (au format .html)
+
+- `dashboard.py` : contient les fonctions permettant de générer les graphiques 
+
+
+## 🧐 Rapport d'Analyse
+
+### 1. Carte
+
+La carte représente le prix moyen du carburant par département. Elle est générée à partir des données instantanées.
+
+### 2. Graphiques
+
+- L'histogramme représente le nombre de stations-services qui proposent un prix moyen du carburant par intervalle de prix. Il est généré à partir des données instantanées.
+On peut observer que la majorité des stations-services proposent un prix moyen du carburant entre 1,5€ et 2€. Et qu'il existe tout de même des stations-services qui proposent un prix moyen du carburant supérieur à 2,5€ parfois et __très__ rarement inférieur à 1€.
+
+- Le graphique représente le prix moyen du carburant par mois. Il est généré à partir des données annuelles.
+On peut observer que le prix moyen du carburant a subit des piques en Mars et Juin 2022. Ces piques se font même ressentir au niveau des médias : [exemple d'article](https://www.turbo.fr/actualite-automobile/carburants-les-prix-senvolent-le-diesel-depasse-largement-les-2-euros-184722).
+
+
+
+
