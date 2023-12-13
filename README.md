@@ -6,6 +6,8 @@ https://github.com/Berachem/CarbuCheck/assets/61350744/a7aa239c-5e8a-431d-abe8-d
 
 Made by Berachem MARKRIA & Joshua LEMOINE 🤩
 
+## Stack
+[![My Skills](https://skillicons.dev/icons?i=python,html,css,js)](https://skillicons.dev)
 
 ## Description du Projet 🚀
 
