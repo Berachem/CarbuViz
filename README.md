@@ -3,12 +3,7 @@
     <img src="./assets/img/carbuVizLogo.png" width="370" height="150">
 </center>
 
-<center>
-    <video width="400" height="240" controls>
-        <source src="./assets/carbuviz_promotion.mp4" type="video/mp4">
-    </video>
-</center>
-
+https://github.com/Berachem/CarbuViz/assets/61350744/874ee356-b36d-4ccc-b91f-7206bfa917c5
 
 Made by Berachem MARKRIA & Joshua LEMOINE 🤩
 
