@@ -1,7 +1,13 @@
-# CarbuViz ⛽️
 
+<center>
+    <img src="./assets/img/carbuVizLogo.png" width="370" height="150">
+</center>
 
-https://github.com/Berachem/CarbuViz/assets/61350744/b4dfe3f8-4b00-4cce-9ac1-96bf40995216
+<center>
+    <video width="400" height="240" controls>
+        <source src="./assets/carbuviz_promotion.mp4" type="video/mp4">
+    </video>
+</center>
 
 
 Made by Berachem MARKRIA & Joshua LEMOINE 🤩
